@@ -61,11 +61,10 @@ input, select {
 
 .calculator-container {
   max-width: 500px;
-  margin: 40px auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   width: 100%; 
   box-sizing: border-box; 
 }
@@ -82,4 +81,22 @@ input, select, button {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+@media (max-width: 600px) {
+  .calculator-container {
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  input, select, button {
+    width: 100%;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .result, .history {
+    word-wrap: break-word;
+    font-size: 1rem;
+  }
 }
