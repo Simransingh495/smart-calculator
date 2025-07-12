@@ -76,3 +76,8 @@ input, select, button {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
