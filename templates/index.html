@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Scientific Calculator</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="calculator">
+    <h1>🔬 Smart Scientific Calculator</h1>
+    <input type="text" id="display" placeholder="Enter expression...">
+    
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('/')">/</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('*')">*</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('-')">-</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="append('+')">+</button>
+
+      <button onclick="append('math.sin(')">sin</button>
+      <button onclick="append('math.cos(')">cos</button>
+      <button onclick="append('math.tan(')">tan</button>
+      <button onclick="append('math.sqrt(')">√</button>
+    </div>
+
+    <div class="extras">
+      <button onclick="clearDisplay()">Clear</button>
+      <button onclick="toggleTheme()">🌗 Theme</button>
+      <button onclick="getHistory()">📓 History</button>
+      <button onclick="startVoice()">🎙 Speak</button>
+    </div>
+
+    <div id="history"></div>
+
+    <h3>🔁 Unit Converter</h3>
+    <input type="number" id="unitValue" placeholder="Enter value">
+    <select id="unitType">
+      <option value="cm_to_inch">cm → inch</option>
+      <option value="inch_to_cm">inch → cm</option>
+      <option value="kg_to_lb">kg → lb</option>
+      <option value="lb_to_kg">lb → kg</option>
+    </select>
+    <button onclick="convert()">Convert</button>
+    <p id="convertResult"></p>
+  </div>
+
+  <script>
+    function append(val) {
+      document.getElementById("display").value += val;
+    }
+
+    function clearDisplay() {
+      document.getElementById("display").value = "";
+    }
+
+    async function calculate() {
+      const expression = document.getElementById("display").value;
+      const res = await fetch("/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expression })
+      });
+      const data = await res.json();
+      if (data.result !== undefined) {
+        document.getElementById("display").value = data.result;
+      } else {
+        alert("❌ " + data.error);
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    async function getHistory() {
+      const res = await fetch("/history");
+      const data = await res.json();
+      document.getElementById("history").innerHTML =
+        "<h4>Recent History</h4><ul>" +
+        data.map(item => `<li>${item}</li>`).join("") +
+        "</ul>";
+    }
+
+    async function convert() {
+      const value = document.getElementById("unitValue").value;
+      const type = document.getElementById("unitType").value;
+      const res = await fetch("/convert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value, type })
+      });
+      const data = await res.json();
+      if (data.converted !== undefined) {
+        document.getElementById("convertResult").innerText = "Result: " + data.converted;
+      } else {
+        document.getElementById("convertResult").innerText = "Error in conversion";
+      }
+    }
+
+    function startVoice() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.onresult = function(event) {
+        const spoken = event.results[0][0].transcript;
+        document.getElementById("display").value = spoken;
+        calculate();
+      };
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
