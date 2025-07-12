@@ -39,3 +39,22 @@ input, select {
 .buttons button, .extras button {
   width: 23%;
   padding:
+
+@media (max-width: 600px) {
+  .calculator-container {
+    width: 90%;
+    font-size: 1rem;
+    padding: 15px;
+  }
+
+  input, select, button {
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .result, .history {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+}
