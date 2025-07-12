@@ -42,19 +42,19 @@ def convert():
 
     try:
         conversions = {
-           <option value="cm_to_inch">cm → inch</option>
-            <option value="inch_to_cm">inch → cm</option>
-            <option value="kg_to_lb">kg → lb</option>
-            <option value="lb_to_kg">lb → kg</option>
-            <option value="km_to_mi">km → miles</option>
-            <option value="mi_to_km">miles → km</option>
-            <option value="c_to_f">°C → °F</option>
-            <option value="f_to_c">°F → °C</option>
-            <option value="m_to_ft">meters → feet</option>
-            <option value="ft_to_m">feet → meters</option>
-            <option value="l_to_gal">liters → gallons</option>
-            <option value="gal_to_l">gallons → liters</option>
-        }
+    "cm_to_inch": value / 2.54,
+    "inch_to_cm": value * 2.54,
+    "kg_to_lb": value * 2.20462,
+    "lb_to_kg": value / 2.20462,
+    "km_to_mi": value * 0.621371,
+    "mi_to_km": value / 0.621371,
+    "c_to_f": (value * 9/5) + 32,
+    "f_to_c": (value - 32) * 5/9,
+    "m_to_ft": value * 3.28084,
+    "ft_to_m": value / 3.28084,
+    "l_to_gal": value * 0.264172,
+    "gal_to_l": value / 0.264172
+}
         converted = conversions.get(conversion_type, "Invalid")
         return jsonify({"converted": round(converted, 4)})
     except Exception as e:
